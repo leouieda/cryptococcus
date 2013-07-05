@@ -6,6 +6,8 @@ fungui is a software to help measuring the shell of a fungi.
 
 # Import modules
 from PyQt4 import QtGui, QtCore
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 import sys
 
 
@@ -78,7 +80,53 @@ class Widget(QtGui.QWidget):
 
     def create_frame(self):
         """The frame"""
-        self.main_frame = QtGui.QWidget()        
+        self.main_frame = QtGui.QWidget()   
+        
+        # Create the mpl Figure and FigCanvas objects. 
+        # 5x4 inches, 100 dots-per-inch
+        #
+        self.dpi = 100
+        self.fig = Figure((5.0, 4.0), dpi = self.dpi)
+        self.canvas = FigureCanvas(self.fig)
+        self.canvas.setParent(self.main_frame)  
+        
+        # Since we have only one plot, we can use add_axes 
+        # instead of add_subplot, but then the subplot
+        # configuration tool in the navigation toolbar wouldn't
+        # work.
+        #
+        self.axes = self.fig.add_subplot(111) 
+            
+        self.on_draw()
+        
+        #
+        # Layout with box sizers
+        #
+        # define grid
+        grid = QtGui.QGridLayout()
+        #grid.setSpacing(10)
+        
+        #set matplotlib canvas
+        grid.addWidget(self.canvas, 0, 1, 1, 1)
+
+        self.setLayout(grid) 
+        
+        self.show()  
+      
+        
+    # Draw canvas        
+    def on_draw(self):
+        """ draws the figure"""
+        # clear the axes and redraw the plot anew
+        #
+        self.axes.clear()        
+        
+        self.axes.plot(range(10), [i**2 for i in range(10)])
+        
+        self.axes.set_title('Image name', fontsize= 'small') 
+        
+        self.canvas.draw()                
+               
        
 
         
