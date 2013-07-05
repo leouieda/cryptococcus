@@ -99,6 +99,15 @@ class Widget(QtGui.QWidget):
             
         self.on_draw()
         
+        
+        # button to open image through file dialog
+        self.open_button = QtGui.QPushButton('Open', self)
+        self.open_button.clicked.connect(self.file_dialog)
+        self.open_button.setToolTip('Open image')
+        #self.obs_button.resize(self.open_button.sizeHint())
+        self.open_button.setMaximumWidth(60)        
+        
+        
         #
         # Layout with box sizers
         #
@@ -107,7 +116,9 @@ class Widget(QtGui.QWidget):
         #grid.setSpacing(10)
         
         #set matplotlib canvas
-        grid.addWidget(self.canvas, 0, 1, 1, 1)
+        grid.addWidget(self.canvas, 0, 1, 6, 1)
+        #open image button
+        grid.addWidget(self.open_button, 0, 0)
 
         self.setLayout(grid) 
         
@@ -125,9 +136,18 @@ class Widget(QtGui.QWidget):
         
         self.axes.set_title('Image name', fontsize= 'small') 
         
-        self.canvas.draw()                
-               
-       
+        self.canvas.draw()  
+
+
+    # Support Modules              
+    def file_dialog(self):
+        """Open a file dialog"""
+        #self.fileDialog = QtGui.QFileDialog(self)
+        #self.fileDialog.show()
+        fname = str(QtGui.QFileDialog.getOpenFileName(self,"Open File"))
+        if fname != '':
+            # here we should set a variable to passname
+            pass
 
         
 def main():
