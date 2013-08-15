@@ -5,17 +5,23 @@ from PyQt4 import QtGui
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 
-FRAME_WIDTH = 1020
-FRAME_HEIGHT = 480
 
 class MainWindow(QtGui.QMainWindow):
+
+    width = 1020
+    height = 480
+
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.populate()
+
+    def populate(self):
+        "Initializes the GUI and populates with widgets."
         self.wdg = Widget()
         self.setCentralWidget(self.wdg)
         self.createActions()
         self.createMenus()
-        self.resize(FRAME_WIDTH, FRAME_HEIGHT)
+        self.resize(self.width, self.height)
         self.center()
         self.setWindowTitle('Fungui')
         self.show()
