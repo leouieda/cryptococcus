@@ -3,8 +3,6 @@ fungui is a software to help measuring the shell of a fungi.
 """
 from __future__ import division
 from PyQt4 import QtGui, QtCore
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -20,13 +18,13 @@ class MainWindow(QtGui.QMainWindow):
 
     def populate(self):
         "Initializes the GUI and populates with widgets."
+        self.image_pane = QtGui.QScrollArea()
+        self.setCentralWidget(self.image_pane)
         self.image_widget = QtGui.QLabel()
         self.image_widget.setSizePolicy(QtGui.QSizePolicy.Ignored,
             QtGui.QSizePolicy.Ignored)
         self.image_widget.setScaledContents(True)
-        self.image_pane = QtGui.QScrollArea()
         self.image_pane.setWidget(self.image_widget)
-        self.setCentralWidget(self.image_pane)
         self.create_actions()
         self.create_menus()
         self.resize(self.width, self.height)
@@ -93,21 +91,12 @@ class MainWindow(QtGui.QMainWindow):
     def zoom_in(self):
         self.zoom_level *= 1.25
         self.scale_img(self.zoom_level)
-        self.zoom_in_act.setEnabled(self.zoom_level < 3.0)
 
     def zoom_out(self):
         self.zoom_level *= 0.8
         self.scale_img(self.zoom_level)
-        self.zoom_out_act.setEnabled(self.zoom_level > 0.333)
 
     def scale_img(self, factor):
         "Scaled the image by a factor"
-        self.image_widget.resize(
-                factor*self.image_widget.pixmap().size())
-        self.adjust_scrollbar(self.image_pane.horizontalScrollBar(), factor)
-        self.adjust_scrollbar(self.image_pane.verticalScrollBar(), factor)
-
-    def adjust_scrollbar(self, scrollbar, factor):
-        scrollbar.setValue(int(
-            factor*scrollbar.value() + ((factor - 1)*scrollbar.pageStep()/2)))
+        self.image_widget.resize(factor*self.image_widget.pixmap().size())
 
