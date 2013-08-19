@@ -16,8 +16,9 @@ class ImageWindow(QtGui.QMainWindow):
             QtGui.QSizePolicy.Ignored)
         self.image_widget.setScaledContents(True)
         self.setCentralWidget(self.image_widget)
+
+    def initial_size(self):
         self.resize(self.starting_width, self.starting_width)
-        self.center()
 
     def connect(self):
         self.create_actions()
@@ -42,6 +43,8 @@ class ImageWindow(QtGui.QMainWindow):
             triggered=self.about)
         self.open_img_act = QtGui.QAction(self.tr("&Open"), self,
             shortcut="Ctrl+O", triggered=self.open_img)
+        self.select_act = QtGui.QAction(self.tr("&Select"), self,
+            shortcut="Ctrl+L", triggered=self.select)
 
     def create_menus(self):
         "Connect menu items with actions"
@@ -49,5 +52,23 @@ class ImageWindow(QtGui.QMainWindow):
         self.file_menu.addAction(self.open_img_act)
         self.file_menu.addAction(self.exit_act)
         self.image_menu = self.menuBar().addMenu(self.tr("&Image"))
+        self.image_menu.addAction(self.select_act)
         self.help_menu = self.menuBar().addMenu(self.tr("&Help"))
         self.help_menu.addAction(self.about_act)
+
+class SelectionWindow(ImageWindow):
+
+    starting_width = 300
+
+    def __init__(self):
+        super(SelectionWindow, self).__init__()
+
+    def create_actions(self):
+        "Create actions and connect them to the proper functions/methods"
+        self.close_act = QtGui.QAction(self.tr("Close"), self,
+            shortcut="Ctrl+Q", triggered=self.close)
+
+    def create_menus(self):
+        "Connect menu items with actions"
+        self.selection_menu = self.menuBar().addMenu(self.tr("Selection"))
+        self.selection_menu.addAction(self.close_act)

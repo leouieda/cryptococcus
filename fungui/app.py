@@ -4,7 +4,7 @@ fungui is a software to help measuring the shell of a fungi.
 from __future__ import division
 import os
 from PyQt4 import QtGui, QtCore
-from .gui import ImageWindow
+from .gui import ImageWindow, SelectionWindow
 
 
 class App(object):
@@ -13,12 +13,18 @@ class App(object):
 
     def __init__(self):
         super(App, self).__init__()
-        self.image_window = ImageWindow()
-        self.image_window.open_img = self.open_img
-        self.image_window.connect()
-        self.image_window.setWindowTitle(self.appname)
         self.imgsize = None
         self.image_path = QtCore.QDir.currentPath()
+        self.image_window = ImageWindow()
+        self.image_window.open_img = self.open_img
+        self.image_window.select = self.select
+        self.image_window.connect()
+        self.image_window.setWindowTitle(self.appname)
+        self.image_window.center()
+        self.image_window.initial_size()
+        self.selection_window = SelectionWindow()
+        self.selection_window.connect()
+        self.selection_window.initial_size()
 
     def open_img(self):
         "Starts a file browser to select an image to open."
@@ -40,6 +46,18 @@ class App(object):
             self.image_window.image_widget.resize(w, h)
             self.image_window.setWindowTitle(
                 ' - '.join([self.appname, str(fname)]))
+            self.selection_window.image_widget.clear()
+            self.selection_window.initial_size()
+
+    def select(self):
+        image = self.image_window.image_widget.pixmap()
+        i, j, w, h = 0, 0, 200, 500
+        selection = image.copy(i, j, w, h)
+        self.selection_window.image_widget.setPixmap(selection)
+        self.selection_window.resize(w, h)
+        self.selection_window.setWindowTitle(
+                ' - '.join([self.appname, 'Selection']))
+        self.selection_window.show()
 
     def run(self):
         self.image_window.show()
