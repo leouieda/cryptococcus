@@ -7,24 +7,16 @@ from PyQt4 import QtGui, QtCore
 
 class ImageWindow(QtGui.QMainWindow):
 
-    width = 1000
-    height = 600
+    starting_width = 600
 
     def __init__(self):
         super(ImageWindow, self).__init__()
-        self.populate()
-        self.zoom_level = 1
-
-    def populate(self):
-        "Initializes the GUI and populates with widgets."
-        self.image_pane = QtGui.QScrollArea()
-        self.setCentralWidget(self.image_pane)
         self.image_widget = QtGui.QLabel()
         self.image_widget.setSizePolicy(QtGui.QSizePolicy.Ignored,
             QtGui.QSizePolicy.Ignored)
         self.image_widget.setScaledContents(True)
-        self.image_pane.setWidget(self.image_widget)
-        self.resize(self.width, self.height)
+        self.setCentralWidget(self.image_widget)
+        self.resize(self.starting_width, self.starting_width)
         self.center()
 
     def connect(self):
@@ -50,10 +42,6 @@ class ImageWindow(QtGui.QMainWindow):
             triggered=self.about)
         self.open_img_act = QtGui.QAction(self.tr("&Open"), self,
             shortcut="Ctrl+O", triggered=self.open_img)
-        self.zoom_in_act = QtGui.QAction(self.tr("Zoom &In"), self,
-            shortcut="+", triggered=self.zoom_in)
-        self.zoom_out_act = QtGui.QAction(self.tr("Zoom &Out"), self,
-            shortcut="-", triggered=self.zoom_out)
 
     def create_menus(self):
         "Connect menu items with actions"
@@ -61,20 +49,5 @@ class ImageWindow(QtGui.QMainWindow):
         self.file_menu.addAction(self.open_img_act)
         self.file_menu.addAction(self.exit_act)
         self.image_menu = self.menuBar().addMenu(self.tr("&Image"))
-        self.image_menu.addAction(self.zoom_in_act)
-        self.image_menu.addAction(self.zoom_out_act)
         self.help_menu = self.menuBar().addMenu(self.tr("&Help"))
         self.help_menu.addAction(self.about_act)
-
-    def zoom_in(self):
-        self.zoom_level *= 1.25
-        self.scale_img(self.zoom_level)
-
-    def zoom_out(self):
-        self.zoom_level *= 0.8
-        self.scale_img(self.zoom_level)
-
-    def scale_img(self, factor):
-        "Scaled the image by a factor"
-        self.image_widget.resize(factor*self.image_widget.pixmap().size())
-
