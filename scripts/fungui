@@ -2,14 +2,14 @@
 
 import sys
 from PyQt4 import QtGui
-from fungui.app import MainWindow
+from fungui.app import App 
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
-    mainwindow = MainWindow()
-    mainwindow.show()
-    sys.exit(app.exec_())
+    qtapp = QtGui.QApplication(sys.argv)
+    app = App()
+    app.run()
+    sys.exit(qtapp.exec_())
 
 if __name__ == '__main__':
     main()
