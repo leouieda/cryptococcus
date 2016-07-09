@@ -1,0 +1,39 @@
+language: generic
+
+sudo: false
+
+matrix:
+    include:
+        - os: linux
+          env:
+             - PYTHON_VERSION=3.5
+             - MINICONDA=$HOME/miniconda
+             - PATH="$MINICONDA/bin:$PATH"
+             - MINICONDA_URL="https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+        - os: osx
+          env:
+             - PYTHON_VERSION=3.5
+             - MINICONDA=$HOME/miniconda
+             - PATH="$MINICONDA/bin:$PATH"
+             - MINICONDA_URL="https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+
+
+before_install:
+    - bash ci/install-miniconda.sh
+    - conda create -n testenv --yes pip python=$PYTHON_VERSION
+    - source activate testenv
+    - conda install --file ci/requirements-conda.txt
+    - pip install -r ci/requirements-pip.txt
+    - conda list
+
+install:
+    # Package and install
+    - python setup.py sdist --formats=gztar
+    - pip install dist/*.tar.gz
+
+script:
+    - make pep8
+    - make coverage
+
+after_success:
+    - coveralls

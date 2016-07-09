@@ -1,0 +1,7 @@
+numpy
+scipy
+scikit-image
+pytest
+pytest-cov
+coverage
+pep8
