@@ -21,7 +21,7 @@ URL = "http://github.com/leouieda/{}".format(NAME)
 LICENSE = "BSD 3-clause"
 PLATFORMS = "OS Independent"
 PACKAGES = find_packages()
-PACKAGE_DATA = {os.path.join(NAME, 'datasets'): [os.path.join('data', '*')]}
+PACKAGE_DATA = {'{}.datasets.data'.format(NAME): ['*']}
 REQUIRES = ["numpy"]
 CLASSIFIERS = ["Development Status :: 3 - Alpha",
                "Environment :: Console",
